@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
+using System.Security.AccessControl;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -20,5 +22,6 @@ namespace CRUD_Basico.Classes
             DtNascimento = dtNascimento;
             Ativo = ativo;
         }
+
     }
 }
