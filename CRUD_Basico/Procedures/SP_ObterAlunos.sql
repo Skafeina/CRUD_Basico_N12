@@ -1,0 +1,3 @@
+CREATE PROCEDURE SP_ObterAlunos
+AS
+SELECT * FROM Aluno
