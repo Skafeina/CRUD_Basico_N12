@@ -40,16 +40,13 @@ namespace CRUD_Basico
         {
             DgvAlunos.Rows.Clear();
 
+            //Ordenando a lista de alunos pelo Nome (ordem alfabética)
+            _alunos = _alunos.OrderBy(a => a.Nome).ToList();
+
             foreach (Aluno aluno in _alunos)
             {
                 DgvAlunos.Rows.Add(aluno.Id, aluno.Nome, aluno.DtNascimento.ToString("dd/MM/yyyy"));
             }
-
-        }
-
-
-        private void BtnCadastrar_Click(object sender, EventArgs e)
-        {
 
         }
 
@@ -161,9 +158,17 @@ namespace CRUD_Basico
                 //Cadastrar aluno novo
                 try
                 {
+                    //Alimenta um novo objeto do tipo Aluno via construtor com as informações fornecidas pelo usuário
                     Aluno novoAluno = new Aluno(TxbNome.Text, DtpDtNascimento.Value, CkbAtivo.Checked);
 
+                    //Cadastra o aluno no banco de dados
                     novoAluno.Cadastrar();
+                    //Adiciona este novo aluno na lista de alunos
+                    _alunos.Add(novoAluno);
+                    //Recarrega o DataGriView aluno
+                    CarregaDgvAluno();
+                    //Configura os botões e campos como se tivesse clicado no botão "Novo" (parâmetro 1)
+                    ConfiguraBotoesECampos(1);
                     MessageBox.Show($"Aluno cadastrado com sucesso:\n {novoAluno.Nome}\nId inserido pelo banco: {novoAluno.Id}");
                 }
                 catch (Exception ex)
@@ -173,9 +178,47 @@ namespace CRUD_Basico
             }
             else
             {
+                //Remover o aluno selecionado da lista de alunos
+                _alunos.Remove(_alunoSelecionado);
+                
                 //Alterar um aluno existente
+                _alunoSelecionado.Nome = TxbNome.Text;
+                _alunoSelecionado.DtNascimento = DtpDtNascimento.Value;
+                _alunoSelecionado.Ativo = CkbAtivo.Checked;
+
+                try
+                {
+                    string retornoBD = _alunoSelecionado.Atualizar();
+                    _alunos.Add(_alunoSelecionado);
+                    CarregaDgvAluno();
+                    ConfiguraBotoesECampos(1);
+                    MessageBox.Show(retornoBD);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+                
             }
 
+        }
+
+        private void TsbExcluir_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                //Remover o aluno selecionado do banco e o retorno da frase sendo armazenado na variável
+                string retornoBD = _alunoSelecionado.Excluir();
+                //Remover o aluno da lista que está em memória
+                _alunos.Remove(_alunoSelecionado);
+                CarregaDgvAluno();
+                ConfiguraBotoesECampos(1);
+                MessageBox.Show(retornoBD);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
     }
 }

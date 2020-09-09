@@ -84,6 +84,8 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <Content Include="Procedures\SP_AtualizaAluno.sql" />
+    <Content Include="Procedures\SP_ExcluirAluno.sql" />
     <Content Include="Procedures\SP_InsereAluno.sql" />
     <Content Include="Procedures\SP_ObterAlunos.sql" />
   </ItemGroup>

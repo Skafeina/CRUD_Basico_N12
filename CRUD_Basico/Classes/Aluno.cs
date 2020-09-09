@@ -68,6 +68,72 @@ namespace CRUD_Basico.Classes
             }
         }
 
+        public string Atualizar()
+        {
+            try
+            {
+                //Indicar o nome da procedure
+                string nomeProcedure = "SP_AtualizaAluno";
+
+                //Alimentar os parâmetros da procedure
+                List<SqlParameter> parametros = new List<SqlParameter>
+                {
+                    new SqlParameter("Nome", Nome),
+                    new SqlParameter("DtNascimento", DtNascimento),
+                    new SqlParameter("Ativo", Ativo),
+                    new SqlParameter("Id", Id)
+                };
+
+                //Executar a procedure e recuperar seu retorno
+                DataSet ds = Consultar(nomeProcedure, parametros);
+
+                //Tratar o retorno da procedure
+                if (ds != null && ds.Tables != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
+                {
+                    return ds.Tables[0].Rows[0][0].ToString();
+                }
+                else
+                {
+                    throw new Exception("Não houve retorno do banco.");
+                }
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public string Excluir()
+        {
+            try
+            {
+                string nomeProcedure = "SP_ExcluirAluno";
+
+                List<SqlParameter> parametros = new List<SqlParameter>
+                {
+                    new SqlParameter("Id", Id)
+                };
+
+                DataSet ds = Consultar(nomeProcedure, parametros);
+
+                //Tratar o retorno da procedure
+                if (ds != null && ds.Tables != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
+                {
+                    return ds.Tables[0].Rows[0][0].ToString();
+                }
+                else
+                {
+                    throw new Exception("Não houve retorno do banco.");
+                }
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
         public List<Aluno> ObterAlunos()
         {
             try
